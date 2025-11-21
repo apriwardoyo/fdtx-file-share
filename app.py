@@ -24,11 +24,12 @@ def index():
         return redirect('/')
 
     files = []
-    if os.path.exists(UPLOAD_FOLDER):
-        for f in sorted(os.listdir(UPLOAD_FOLDER)):
-            full = os.path.join(UPLOAD_FOLDER, f)
-            if os.path.isfile(full):
-                files.append({'name': f, "size": round(os.path.getsize(filepath) / (1024 * 1024), 2)})
+    for filename in os.listdir(UPLOAD_FOLDER):
+        filepath = os.path.join(UPLOAD_FOLDER, filename)
+        if os.path.isfile(filepath):
+            size_mb = round(os.path.getsize(filepath) / (1024 * 1024), 2)
+            files.append({"name": filename,"size": size_mb})
+
 
     return render_template('index.html', files=files)
 
@@ -55,4 +56,5 @@ def delete_file(filename):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
+
 
