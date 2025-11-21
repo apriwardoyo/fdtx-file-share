@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+name: fdtx-fileshare
+namespace: fdtx-test
+spec:
+replicas: 1
+selector:
+matchLabels:
+app: fdtx-fileshare
+template:
+metadata:
+labels:
+app: fdtx-fileshare
+spec:
+containers:
+- name: fdtx-fileshare
+image: "fdtx-fileshare:latest" # replace with image built by OpenShift or image registry URL
+imagePullPolicy: IfNotPresent
+ports:
+- containerPort: 8080
+protocol: TCP
+volumeMounts:
+- name: files-volume
+mountPath: /data
+volumes:
+- name: files-volume
+persistentVolumeClaim:
+claimName: fdtx-pvc-fileshare
