@@ -38,7 +38,7 @@
 {% for f in files %}
 <tr>
 <td>{{ f.name }}</td>
-<td>{{ f.size }}</td>
+<td>{{ f.size }} MB</td>
 <td>
 <a href="{{ url_for('download', filename=f.name) }}">Download</a>
 <form action="{{ url_for('delete_file', filename=f.name) }}" method="post" style="display:inline">
@@ -54,4 +54,5 @@
 {% endif %}
 </div>
 </body>
+
 </html>
