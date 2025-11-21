@@ -2,8 +2,7 @@ from flask import Flask, render_template, request, redirect, send_from_directory
 import os
 from werkzeug.utils import secure_filename
 
-UPLOAD_FOLDER = '/data'
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+UPLOAD_FOLDER = '/data'   # This will exist once the PVC is mounted
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -19,15 +18,17 @@ def index():
             return redirect('/')
 
         filename = secure_filename(file.filename)
-        file.save(os.path.join(UPLOAD_FOLDER, filename))
+        save_path = os.path.join(UPLOAD_FOLDER, filename)
+        file.save(save_path)
         flash(f'Uploaded {filename}')
         return redirect('/')
 
     files = []
-    for f in sorted(os.listdir(UPLOAD_FOLDER)):
-        full = os.path.join(UPLOAD_FOLDER, f)
-        if os.path.isfile(full):
-            files.append({'name': f, 'size': os.path.getsize(full)})
+    if os.path.exists(UPLOAD_FOLDER):
+        for f in sorted(os.listdir(UPLOAD_FOLDER)):
+            full = os.path.join(UPLOAD_FOLDER, f)
+            if os.path.isfile(full):
+                files.append({'name': f, 'size': os.path.getsize(full)})
 
     return render_template('index.html', files=files)
 
