@@ -28,7 +28,7 @@ def index():
         for f in sorted(os.listdir(UPLOAD_FOLDER)):
             full = os.path.join(UPLOAD_FOLDER, f)
             if os.path.isfile(full):
-                files.append({'name': f, 'size': os.path.getsize(full)})
+                files.append({'name': f, "size": round(os.path.getsize(filepath) / (1024 * 1024), 2)})
 
     return render_template('index.html', files=files)
 
@@ -55,3 +55,4 @@ def delete_file(filename):
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080)
+
